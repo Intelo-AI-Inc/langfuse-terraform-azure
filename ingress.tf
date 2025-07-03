@@ -1,4 +1,18 @@
 locals {
+  # Regions that don't support availability zones for public IP addresses and Application Gateway
+  regions_without_availability_zones = [
+    "westus",
+    "westus2",
+    "centralus",
+    "eastus",
+    "eastus2",
+    "northcentralus",
+    "southcentralus",
+    "westcentralus"
+  ]
+  
+  supports_availability_zones = !contains(local.regions_without_availability_zones, var.location)
+  
   ingress_values = <<EOT
 langfuse:
   ingress:
@@ -130,7 +144,7 @@ resource "azurerm_application_gateway" "this" {
     capacity = var.app_gateway_capacity
   }
 
-  zones = [1, 2, 3]
+  zones = local.supports_availability_zones ? [1, 2, 3] : null
 
   gateway_ip_configuration {
     name      = var.name
@@ -224,5 +238,5 @@ resource "azurerm_public_ip" "appgw" {
   location            = azurerm_resource_group.this.location
   allocation_method   = "Static"
   sku                 = "Standard"
-  zones               = [1, 2, 3]
+  zones               = local.supports_availability_zones ? [1, 2, 3] : null
 }

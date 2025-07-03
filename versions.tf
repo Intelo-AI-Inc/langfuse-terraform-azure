@@ -9,10 +9,16 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.10"
+      configuration_aliases = [
+        kubernetes.langfuse,
+      ]
     }
     helm = {
       source  = "hashicorp/helm"
       version = ">= 2.5"
+      configuration_aliases = [
+        helm.langfuse,
+      ]
     }
     random = {
       source  = "hashicorp/random"
