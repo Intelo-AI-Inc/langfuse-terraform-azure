@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "this" {
-  name     = var.name
+  name     = "intelo-agents-ops-rg"
   location = var.location
 }

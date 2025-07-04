@@ -65,6 +65,7 @@ EOT
 }
 
 resource "kubernetes_namespace" "langfuse" {
+  provider = kubernetes.langfuse
   metadata {
     name = "langfuse"
   }
@@ -87,6 +88,7 @@ resource "random_bytes" "encryption_key" {
 }
 
 resource "kubernetes_secret" "langfuse" {
+  provider = kubernetes.langfuse
   metadata {
     name      = "langfuse"
     namespace = "langfuse"
@@ -104,6 +106,7 @@ resource "kubernetes_secret" "langfuse" {
 }
 
 resource "helm_release" "langfuse" {
+  provider         = helm.langfuse
   name             = "langfuse"
   repository       = "https://langfuse.github.io/langfuse-k8s"
   version          = var.langfuse_helm_chart_version

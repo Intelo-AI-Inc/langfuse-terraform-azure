@@ -1,6 +1,6 @@
 # Make sure to use a historic globally unique name, since they key vault is created with soft deletion
 resource "random_string" "key_vault_postfix" {
-  length  = 4
+  length  = 3
   lower   = true
   numeric = false
   special = false
