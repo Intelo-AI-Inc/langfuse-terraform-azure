@@ -205,6 +205,7 @@ resource "azurerm_application_gateway" "this" {
     backend_address_pool_name  = "backend-address-pool"
     backend_http_settings_name = "backend-http-settings"
     priority                   = 1
+    redirect_configuration_name = "ssl-redirect-config"
   }
 
   request_routing_rule {
@@ -214,6 +215,14 @@ resource "azurerm_application_gateway" "this" {
     backend_address_pool_name  = "backend-address-pool"
     backend_http_settings_name = "backend-http-settings"
     priority                   = 2
+  }
+
+  redirect_configuration {
+    name                 = "ssl-redirect-config"
+    redirect_type        = "Permanent"
+    target_listener_name = "https-listener"
+    include_path         = true
+    include_query_string = true
   }
 
   # The AppGW is later managed by the  Ingress Controller, but the Backend address
@@ -228,6 +237,7 @@ resource "azurerm_application_gateway" "this" {
       probe,
       request_routing_rule,
       frontend_port,
+      redirect_configuration,
     ]
   }
 }
